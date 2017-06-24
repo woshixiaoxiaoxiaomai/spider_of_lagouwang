@@ -92,3 +92,77 @@ def getjob_description(self):
 
     f1.close()
     f2.close()
+import jieba
+import wordcloud
+import jieba.posseg as pseg
+f=open("D:/jobbt.txt","r",encoding="utf-8")
+r1=f.readline()
+dic={}
+print(r1)
+i=0
+while r1:
+    words=pseg.cut(r1)
+    for word,flag in words:
+        #print('%s,%s'%(word,flag))
+        if(flag=='eng'):# or flag=="n"):
+            #print('%s,%s'%(word,flag))
+            word=word.lower()
+            if(word in dic):
+                dic[word]=dic[word]+10
+            else:dic[word]=1
+    #print(dic)
+    r1=f.readline()
+    i=i+1
+    print(i)
+    print(len(dic))
+f.close()
+print(dic)
+
+b=sorted(dic.items(),key=lambda item:item[1],reverse=True)
+#print(b)
+b=b[1:100]
+dd={}
+total=0
+for i in b:
+    total=total+i[1]
+for i in b:
+    print(i)
+    dd[i[0]]=i[1]/total
+
+#from scipy.misc import imread
+#import numpy as np
+#from PIL import Image
+#from wordcloud import WordCloud,STOPWORDS,ImageColorGenerator
+from wordcloud import WordCloud,STOPWORDS,ImageColorGenerator
+import matplotlib.pyplot as plt
+#alice_coloring = imread("F:/python程序/例题/网络爬虫/yxdown/a.png")
+alice_coloring = np.array(Image.open( "a.png"))
+wc = WordCloud(background_color="white", #背景颜色max_words=2000,# 词云显示的最大词数
+#mask=alice_coloring,#设置背景图片
+stopwords=STOPWORDS.add("said"),
+max_font_size=40, #字体最大值
+random_state=42).generate_from_frequencies(dd)
+#image_colors = ImageColorGenerator(alice_coloring)
+
+plt.figure()
+plt.imshow(wc)
+plt.axis("off")
+plt.show()
+    # 以下代码显示图片
+"""    
+    plt.imshow(wc)
+    plt.axis("off")
+    # 绘制词云
+    plt.figure()
+    # recolor wordcloud and show
+    # we could also give color_func=image_colors directly in the constructor
+    plt.imshow(wc.recolor(color_func=image_colors))
+    plt.axis("off")
+    # 绘制背景图片为颜色的图片
+    plt.figure()
+    plt.imshow(alice_coloring, cmap=plt.cm.gray)
+    plt.axis("off")
+    plt.show()
+    # 保存图片
+    wc.to_file("名称.png")
+"""
