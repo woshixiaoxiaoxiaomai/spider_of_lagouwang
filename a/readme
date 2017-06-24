@@ -1,0 +1,3 @@
+geturls函数是从拉勾网获取相应的职位所有的urls存放在一个文件里；
+getjob_description函数是从刚才的urls中挨个爬取其中的职位描述；
+剩下的是用jieba分词和wordcloud来制作词云
